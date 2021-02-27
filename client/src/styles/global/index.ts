@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
   :root {
@@ -14,14 +14,14 @@ export default createGlobalStyle`
   }
 
   /* Set font-size to lower devices */
-  @media(max-width: 1080px) {
+  @media(max-width: 1300px) {
     html {
-      font-size: 93.75%;
+      font-size: 90%;
     }
   }
-  @media(max-width: 720px) {
+  @media(max-width: 1150px) {
     html {
-      font-size: 87.5%;
+      font-size: 80%;
     }
   }
 
@@ -47,4 +47,9 @@ export default createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
+`;
+
+export const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
 `;
