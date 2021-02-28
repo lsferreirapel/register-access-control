@@ -107,6 +107,12 @@ export const LoginForm = styled.form`
     height: 21rem;
   }
 
+  .alert-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   button {
     width: 9rem;
     height: 4rem;
@@ -123,6 +129,10 @@ export const LoginForm = styled.form`
     transition: background 0.3s;
     &:hover {
       background: #00ad4a;
+    }
+
+    &:disabled {
+      background: var(--gray);
     }
   }
 `;

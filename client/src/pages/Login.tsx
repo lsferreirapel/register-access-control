@@ -1,15 +1,22 @@
-import React, { MouseEvent } from 'react';
-
+import React, { FormEvent, useContext, useState } from 'react';
+import Alert from '@material-ui/lab/Alert';
 import {
   Container, Wrapper, LoginBox, LoginForm, LoginField, PasswordField,
 } from '../styles/pages/StyledLogin';
 
 import Brand from '../assets/logo/logo.png';
 import GreenStain from '../assets/login-asset.svg';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Login: React.FC = () => {
-  async function handleLogin(e: MouseEvent) {
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+
+  const { asyncLogin, gqlError, isLoading } = useContext(AuthContext);
+
+  async function handleLogin(e: FormEvent) {
     e.preventDefault();
+    await asyncLogin(identifier, password);
   }
 
   return (
@@ -28,19 +35,31 @@ const Login: React.FC = () => {
             alt="Green stain"
             draggable={false}
           />
-          <LoginForm>
+          <LoginForm onSubmit={(e) => handleLogin(e)}>
 
-            <LoginField htmlFor="login">
+            <LoginField htmlFor="identifier">
               Login
-              <input id="login" type="text" />
+              <input
+                required
+                id="identifier"
+                type="text"
+                onChange={(e) => setIdentifier(e.target.value)}
+              />
             </LoginField>
 
             <PasswordField htmlFor="password">
               Password
-              <input id="password" type="password" />
+              <input
+                required
+                id="password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </PasswordField>
-
-            <button type="submit" onClick={(e) => handleLogin(e)}>Login</button>
+            <div className="alert-div">
+              <button type="submit" disabled={isLoading}>Login</button>
+              { gqlError && <Alert severity="error">{gqlError}</Alert>}
+            </div>
           </LoginForm>
         </LoginBox>
 

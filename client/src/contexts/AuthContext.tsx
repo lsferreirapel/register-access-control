@@ -1,26 +1,26 @@
 import React, { createContext, ReactNode, useState } from 'react';
 
-import { ApolloError, gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 // Set auth context data types
 interface AuthContextData {
   token: string | undefined;
   isLoading: boolean;
-  gqlError: ApolloError | undefined;
+  gqlError: string | undefined;
   // eslint-disable-next-line no-unused-vars
-  asyncLogin(identifier: string, password: String): void;
+  asyncLogin(identifier: string, password: string): void;
 }
 
 // Set login input and output types
-interface LoginInput {
-  identifier: string;
-  password: string
-}
-interface LoginOutput {
-  login: {
-    jwt: string;
-  }
-}
+// interface LoginInput {
+//   identifier: string;
+//   password: string
+// }
+// interface LoginOutput {
+//   login: {
+//     jwt: string;
+//   }
+// }
 
 // Set mutation to access login on API
 const LOGIN = gql`
@@ -41,23 +41,25 @@ interface AuthProviderProps {
 const AuthProvider: React.FC = ({ children }: AuthProviderProps) => {
   // Create hook states
   const [token, setToken] = useState<string>();
-  const [gqlError, setGqlError] = useState<ApolloError>();
+  const [gqlError, setGqlError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
 
   // Create mutation hook
-  const [login, { error, loading, data }] = useMutation<
-    LoginOutput,
-    {input: LoginInput}
-  >(LOGIN);
+  const [login, { loading }] = useMutation(LOGIN);
 
   async function asyncLogin(identifier: string, password: string) {
     // Send HTTP request to GraphQL uri
-    await login({ variables: { input: { identifier, password } } });
+    try {
+      const { data } = await login({ variables: { input: { identifier, password } } });
+      // Set states with mutation response
 
-    // Set states with mutation response
-    setToken(data?.login.jwt);
-    setIsLoading(loading);
-    setGqlError(error);
+      setToken(data?.login.jwt);
+      setIsLoading(loading);
+    } catch (err) {
+      setGqlError(
+        err?.graphQLErrors[0]?.extensions?.exception?.data?.data[0]?.messages[0].message,
+      );
+    }
   }
 
   // Return provider
