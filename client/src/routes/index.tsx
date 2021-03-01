@@ -16,6 +16,8 @@ const Routes: React.FC = () => {
       ) : (
         <Route path="/" exact component={Dashboard} />
       )}
+      {/* Just to test */}
+      <Route path="/dashboard" component={Dashboard} />
 
     </Switch>
   );

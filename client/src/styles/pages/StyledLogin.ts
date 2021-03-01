@@ -10,7 +10,7 @@ export const Container = styled.div`
 
   background: var(--background-login);
 
-  .brand {
+  .logo {
     width: 25rem;
     height: 23rem;
     margin-left: 10rem;

@@ -4,7 +4,7 @@ import {
   Container, Wrapper, LoginBox, LoginForm, LoginField, PasswordField,
 } from '../styles/pages/StyledLogin';
 
-import Brand from '../assets/logo/logo.png';
+import Logo from '../assets/logo/logo.png';
 import GreenStain from '../assets/login-asset.svg';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -23,8 +23,8 @@ const Login: React.FC = () => {
     <Container>
       <Wrapper>
         <img
-          className="brand"
-          src={Brand}
+          className="logo"
+          src={Logo}
           alt="Register access control Brand"
           draggable={false}
         />
