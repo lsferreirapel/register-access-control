@@ -1,146 +1,110 @@
 import React, {
   ReactNode, createContext, useState, useEffect,
 } from 'react';
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 
-// Set QUERY
-interface RegisteredTimes {
-  id: string;
-  timeRegistered: string;
-  user: {
-    id: string;
-    name: string;
-  }
-}
-interface RegisteredTimesData {
-  registeredTimes: RegisteredTimes[]
-}
-// interface MeData {
-//   me: {
-//     id: string;
-//     username: string;
-//     role: {
-//       type: string;
-//     }
-//   }
-// }
+// Import queries
+import {
+  // Type definitions
+  GetRegisteredTimesOutput,
+  getMeOutput,
+  // Queries
+  GET_ME,
+  GET_ALL_REGISTERED_TIMES,
+  GET_REGISTERED_TIMES_BY_USER_ID,
+} from './query';
 
-const GET_ME = gql`
-  query {
-    me {
-      id
-      role {
-        type
-      }
-    }
-  }
-`;
-
-const GET_REGISTERED_TIMES_BY_USER_ID = gql`
-  query RegisteredTimes($sort: String, $where: JSON) {
-    registeredTimes(sort: $sort, where: $where) {
-      id
-      timeRegistered
-      user {
-        id
-        name
-      }
-    }
-  }
-`;
-
-const GET_ALL_REGISTERED_TIMES = gql`
-  query RegisteredTimes($sort: String) {
-    registeredTimes(sort: $sort) {
-      id
-      timeRegistered
-      user {
-        id
-        name
-      }
-    }
-  }
-`;
-
+// Defines the type for values stored in context
 interface RegisteredTimesContextData {
   userId: string | undefined;
   roleType: string | undefined;
-  RegisteredTimesByUserIdData: RegisteredTimesData | undefined;
+  RegisteredTimesByUserIdData: GetRegisteredTimesOutput | undefined;
   RegisteredTimesByUserIdIsLoading: boolean;
   RegisteredTimesByUserIdError: string | undefined;
-  allRegisteredTimesData: RegisteredTimesData | undefined,
+  allRegisteredTimesData: GetRegisteredTimesOutput | undefined,
   allRegisteredTimesIsLoading: boolean,
   allRegisteredTimesError: string | undefined,
 }
 
+// Creates the context
 export const RegisteredTimesContext = createContext({} as RegisteredTimesContextData);
 
+// Defines the type for provider props
 interface RegisteredTimesProviderProps {
   children?: ReactNode;
 }
-
+// Provider definition
 const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderProps) => {
+  // Hook to call the GET_ME Query
+  const getMe = useQuery<getMeOutput>(GET_ME);
+  // Hook to store user ID from getMe Query
   const [userId, setUserId] = useState<string>();
+  // Hook to store user role type from getMe Query
   const [roleType, setRoleType] = useState<string>();
 
+  // Hook to call the GET_REGISTERED_TIMES_BY_USER_ID Query
+  // Get ID from userID
+  const getRegisteredTimesByUserID = useQuery<GetRegisteredTimesOutput>(
+    GET_REGISTERED_TIMES_BY_USER_ID,
+    { variables: { where: { user: { id: 1 } } } },
+  );
+  // Hook to store the getRegisteredTimesByUserID Query response
+  const [
+    RegisteredTimesByUserIdData,
+    setRegisteredTimesByUserIdData,
+  ] = useState<GetRegisteredTimesOutput>();
+  // Hook to store the Loading state from getRegisteredTimesByUserID Query
   const [
     RegisteredTimesByUserIdIsLoading,
     setRegisteredTimesByUserIdIsLoading,
   ] = useState(false);
-  const [
-    RegisteredTimesByUserIdData,
-    setRegisteredTimesByUserIdData,
-  ] = useState<RegisteredTimesData>();
+  // Hook to store errors if exists
   const [
     RegisteredTimesByUserIdError,
     setRegisteredTimesByUserIdError,
   ] = useState<string>();
 
-  // Get all Data
-
+  // Hook to call the GET_ALL_REGISTERED_TIMES Lazy Query
+  // Only administrators can access this query
+  const [getAllRegisteredTimes, AllRegisteredTimes] = useLazyQuery<GetRegisteredTimesOutput>(
+    GET_ALL_REGISTERED_TIMES,
+  );
+  // Hook to store the getAllRegisteredTimes Query response
   const [
     allRegisteredTimesData,
     setAllRegisteredTimesData,
-  ] = useState();
+  ] = useState<GetRegisteredTimesOutput>();
+  // Hook to store the Loading state from getAllRegisteredTimes Query
   const [
     allRegisteredTimesIsLoading,
     setAllRegisteredTimesIsLoading,
   ] = useState<boolean>(false);
+  // Hook to store errors if exists
   const [
     allRegisteredTimesError,
     setAllRegisteredTimesError,
   ] = useState<string>();
 
-  const getMe = useQuery(GET_ME);
-
-  // Only administrators can access this query
-  const [getAllRegisteredTimes, AllRegisteredTimes] = useLazyQuery(
-    GET_ALL_REGISTERED_TIMES,
-    { variables: { sort: 'timeRegistered' } },
-  );
-
-  const getRegisteredTimesByUserID = useQuery(
-    GET_REGISTERED_TIMES_BY_USER_ID,
-    { variables: { sort: 'timeRegistered', where: { user: { id: 1 } } } },
-  );
-
-  const [executeAgain, setExecuteAgain] = useState<boolean>(true);
-  // useEffect(() => {
-
-  // }, []);
+  // Toggles between execute a lazy query and not execute
+  const [execute, setExecute] = useState<boolean>(true);
 
   useEffect(() => {
+    // Set data on hooks with getMe query response
     setUserId(getMe.data?.me.id);
     setRoleType(getMe.data?.me?.role?.type);
 
+    // Set data on hooks with getRegisteredTimesByUserID query response
     setRegisteredTimesByUserIdData(getRegisteredTimesByUserID.data);
     setRegisteredTimesByUserIdIsLoading(getRegisteredTimesByUserID.loading);
     setRegisteredTimesByUserIdError(getRegisteredTimesByUserID.error?.graphQLErrors[0]?.message);
 
+    // If user's a admin role type execute getAllRegisteredTimes lazy query
+    //  and set data on hooks.
+    // Else set allRegisteredTimesError to 'Permission denied'
     if (roleType === 'admin') {
-      if (executeAgain) {
+      if (execute) {
         getAllRegisteredTimes();
-        setExecuteAgain(false);
+        setExecute(false);
       }
       setAllRegisteredTimesData(AllRegisteredTimes.data);
       setAllRegisteredTimesIsLoading(AllRegisteredTimes.loading);
@@ -150,6 +114,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
     }
   }, [AllRegisteredTimes, getRegisteredTimesByUserID, getMe]);
 
+  // Provider return
   return (
     <RegisteredTimesContext.Provider value={{
       userId,
@@ -167,6 +132,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
   );
 };
 
+// Provider default props
 RegisteredTimesProvider.defaultProps = {
   children: null,
 };
