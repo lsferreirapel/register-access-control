@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Card from '../components/Card';
 import Sidebar from '../components/Sidebar';
+import { RegisteredTimesContext } from '../contexts/RegisteredTimesContext';
 
 import {
   Container, CardListHead, CardListBody, CardList,
@@ -33,26 +34,39 @@ export const dataExample = [
   },
 ];
 
-const Dashboard: React.FC = () => (
-  <Container>
-    <Sidebar />
-    <CardList>
-      <CardListHead>
-        <h3>Colaborador</h3>
-        <h3>Data</h3>
-        <h3>Hora</h3>
-      </CardListHead>
-      <CardListBody>
-        {dataExample.map((data) => {
-          const time = new Date(data.timeRegistered);
-          const date = `${String(time.getDay()).padStart(2, '0')}/${String(time.getMonth()).padStart(2, '0')}/${time.getFullYear()}`;
-          const hour = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}h`;
+const Dashboard: React.FC = () => {
+  const context = useContext(RegisteredTimesContext);
+  const {
+    roleType,
+    RegisteredTimesByUserIdIsLoading,
+    allRegisteredTimesIsLoading,
+  } = useContext(RegisteredTimesContext);
 
-          return <Card key={data.id} id={String(data.user.id).padStart(3, '0')} name={data.user.name} date={date} hour={hour} />;
-        })}
-      </CardListBody>
-    </CardList>
-  </Container>
-);
+  useEffect(() => {
+    console.log(context);
+  }, [roleType, RegisteredTimesByUserIdIsLoading, allRegisteredTimesIsLoading]);
+
+  return (
+    <Container>
+      <Sidebar />
+      <CardList>
+        <CardListHead>
+          <h3>Colaborador</h3>
+          <h3>Data</h3>
+          <h3>Hora</h3>
+        </CardListHead>
+        <CardListBody>
+          {dataExample.map((data) => {
+            const time = new Date(data.timeRegistered);
+            const date = `${String(time.getDay()).padStart(2, '0')}/${String(time.getMonth()).padStart(2, '0')}/${time.getFullYear()}`;
+            const hour = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}h`;
+
+            return <Card key={data.id} id={String(data.user.id).padStart(3, '0')} name={data.user.name} date={date} hour={hour} />;
+          })}
+        </CardListBody>
+      </CardList>
+    </Container>
+  );
+};
 
 export default Dashboard;
