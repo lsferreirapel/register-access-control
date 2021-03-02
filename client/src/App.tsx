@@ -4,8 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import GlobalStyles, { Container } from './styles/global';
 
-import AuthProvider from './contexts/AuthContext';
 import apolloClient from './services/apollo';
+import AuthProvider from './contexts/AuthContext';
+import RegisteredTimesProvider from './contexts/RegisteredTimesContext';
 
 import Routes from './routes';
 
@@ -14,7 +15,9 @@ const App: React.FC = () => (
     <BrowserRouter>
       <ApolloProvider client={apolloClient}>
         <AuthProvider>
-          <Routes />
+          <RegisteredTimesProvider>
+            <Routes />
+          </RegisteredTimesProvider>
         </AuthProvider>
       </ApolloProvider>
     </BrowserRouter>
