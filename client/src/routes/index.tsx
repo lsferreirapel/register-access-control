@@ -6,6 +6,8 @@ import { AuthContext } from '../contexts/AuthContext';
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
 
+import RegisteredTimesProvider from '../contexts/RegisteredTimesContext';
+
 const Routes: React.FC = () => {
   const { token } = useContext(AuthContext);
 
@@ -14,7 +16,9 @@ const Routes: React.FC = () => {
       { !token ? (
         <Route path="/" exact component={Login} />
       ) : (
-        <Route path="/" exact component={Dashboard} />
+        <RegisteredTimesProvider>
+          <Route path="/" exact component={Dashboard} />
+        </RegisteredTimesProvider>
       )}
       {/* Just to test */}
       <Route path="/dashboard" component={Dashboard} />
