@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import GlobalStyles, { Container } from './styles/global';
 
-import AuthProvider from './contexts/AuthContext';
 import apolloClient from './services/apollo';
+import AuthProvider from './contexts/AuthContext';
 
 import Routes from './routes';
 
