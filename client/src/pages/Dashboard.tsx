@@ -1,70 +1,54 @@
-import React, { useContext, useEffect } from 'react';
+import { AlertTitle } from '@material-ui/lab';
+import Alert from '@material-ui/lab/Alert';
+import React, { useContext } from 'react';
 import Card from '../components/Card';
 import Sidebar from '../components/Sidebar';
 import { RegisteredTimesContext } from '../contexts/RegisteredTimesContext';
 
 import {
-  Container, CardListHead, CardListBody, CardList,
+  Container, CardListHead, CardListBody, CardList, Loading,
 } from '../styles/pages/StyledDashboard';
 
-export const dataExample = [
-  {
-    id: 1,
-    timeRegistered: '2019-09-18T22:00:52.000Z',
-    user: {
-      id: 3,
-      name: 'João Silva',
-    },
-  },
-  {
-    id: 2,
-    timeRegistered: '2021-01-24T16:44:26.000Z',
-    user: {
-      id: 1,
-      name: 'Administrador',
-    },
-  },
-  {
-    id: 3,
-    timeRegistered: '2021-01-24T16:44:53.000Z',
-    user: {
-      id: 1,
-      name: 'Administrador',
-    },
-  },
-];
-
 const Dashboard: React.FC = () => {
-  const context = useContext(RegisteredTimesContext);
   const {
-    roleType,
-    RegisteredTimesByUserIdIsLoading,
+    allRegisteredTimesData,
     allRegisteredTimesIsLoading,
+    allRegisteredTimesError,
   } = useContext(RegisteredTimesContext);
-
-  useEffect(() => {
-    console.log(context);
-  }, [roleType, RegisteredTimesByUserIdIsLoading, allRegisteredTimesIsLoading]);
 
   return (
     <Container>
       <Sidebar />
-      <CardList>
-        <CardListHead>
-          <h3>Colaborador</h3>
-          <h3>Data</h3>
-          <h3>Hora</h3>
-        </CardListHead>
-        <CardListBody>
-          {dataExample.map((data) => {
-            const time = new Date(data.timeRegistered);
-            const date = `${String(time.getDay()).padStart(2, '0')}/${String(time.getMonth()).padStart(2, '0')}/${time.getFullYear()}`;
-            const hour = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}h`;
+      { allRegisteredTimesIsLoading ? (
+        <Loading size="4.688rem" />
+      ) : (
+        <>
+          { allRegisteredTimesError ? (
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              {allRegisteredTimesError}
+            </Alert>
+          ) : (
+            <CardList>
+              <CardListHead>
+                <h3>Colaborador</h3>
+                <h3>Data</h3>
+                <h3>Hora</h3>
+              </CardListHead>
+              <CardListBody>
+                {allRegisteredTimesData?.registeredTimes.map((registeredTime) => {
+                  const time = new Date(registeredTime.timeRegistered);
+                  const date = `${String(time.getDay()).padStart(2, '0')}/${String(time.getMonth()).padStart(2, '0')}/${time.getFullYear()}`;
+                  const hour = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}h`;
 
-            return <Card key={data.id} id={String(data.user.id).padStart(3, '0')} name={data.user.name} date={date} hour={hour} />;
-          })}
-        </CardListBody>
-      </CardList>
+                  return <Card key={registeredTime.id} id={String(registeredTime.user.id).padStart(3, '0')} name={registeredTime.user.name} date={date} hour={hour} />;
+                })}
+              </CardListBody>
+            </CardList>
+          )}
+        </>
+      )}
+
     </Container>
   );
 };

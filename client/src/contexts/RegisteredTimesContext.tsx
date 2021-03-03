@@ -46,7 +46,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
   // Get ID from userID
   const getRegisteredTimesByUserID = useQuery<GetRegisteredTimesOutput>(
     GET_REGISTERED_TIMES_BY_USER_ID,
-    { variables: { where: { user: { id: 1 } } } },
+    { variables: { sort: 'timeRegistered', where: { user: { id: 1 } } } },
   );
   // Hook to store the getRegisteredTimesByUserID Query response
   const [
@@ -57,7 +57,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
   const [
     RegisteredTimesByUserIdIsLoading,
     setRegisteredTimesByUserIdIsLoading,
-  ] = useState(false);
+  ] = useState(true);
   // Hook to store errors if exists
   const [
     RegisteredTimesByUserIdError,
@@ -68,6 +68,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
   // Only administrators can access this query
   const [getAllRegisteredTimes, AllRegisteredTimes] = useLazyQuery<GetRegisteredTimesOutput>(
     GET_ALL_REGISTERED_TIMES,
+    { variables: { sort: 'timeRegistered' } },
   );
   // Hook to store the getAllRegisteredTimes Query response
   const [
@@ -78,7 +79,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
   const [
     allRegisteredTimesIsLoading,
     setAllRegisteredTimesIsLoading,
-  ] = useState<boolean>(false);
+  ] = useState<boolean>(true);
   // Hook to store errors if exists
   const [
     allRegisteredTimesError,

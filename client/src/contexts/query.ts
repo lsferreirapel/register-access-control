@@ -16,7 +16,7 @@ export interface getMeOutput {
 }
 // Query
 export const GET_ME = gql`
-  query me() : getMeOutput {
+  query {
     me {
       id
       role {
@@ -41,9 +41,10 @@ export interface GetRegisteredTimesOutput {
   registeredTimes: RegisteredTimes[]
 }
 // Query: get by user id
+// "timeRegistered"
 export const GET_REGISTERED_TIMES_BY_USER_ID = gql`
-  query RegisteredTimes($sort: String, $where: JSON): GetRegisteredTimesOutput {
-    registeredTimes(sort: "timeRegistered", where: $where) {
+  query RegisteredTimes($sort: String, $where: JSON) {
+    registeredTimes(sort: $sort, where: $where) {
       id
       timeRegistered
       user {
@@ -56,7 +57,7 @@ export const GET_REGISTERED_TIMES_BY_USER_ID = gql`
 // Query: get all
 export const GET_ALL_REGISTERED_TIMES = gql`
   query RegisteredTimes($sort: String) {
-    registeredTimes(sort: "timeRegistered") {
+    registeredTimes(sort: $sort) {
       id
       timeRegistered
       user {

@@ -1,11 +1,22 @@
+import { CircularProgress } from '@material-ui/core';
 import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-
+  overflow-x: hidden;
 `;
+export const Loading = styled(CircularProgress)`
+  position: absolute;
+  top: 45vh;
+  left: calc(50% + 2rem);
+
+  svg {
+    color: var(--green);
+  }
+`;
+
 export const CardList = styled.div`
   position: absolute;
   top: 13vh;
