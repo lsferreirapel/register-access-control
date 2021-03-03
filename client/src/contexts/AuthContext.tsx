@@ -1,71 +1,95 @@
-import React, { createContext, ReactNode, useState } from 'react';
-
-import { gql, useMutation } from '@apollo/client';
+import React, {
+  createContext, ReactNode, useEffect, useState,
+} from 'react';
+import { useMutation } from '@apollo/client';
+import {
+  // Type definitions
+  LoginOutput,
+  LoginInput,
+  // Mutations
+  LOGIN,
+} from './query';
 
 // Set auth context data types
 interface AuthContextData {
-  token: string | undefined;
+  token: string | null | undefined;
   isLoading: boolean;
   gqlError: string | undefined;
-  // eslint-disable-next-line no-unused-vars
-  asyncLogin(identifier: string, password: string): void;
+  Login(): void;
+  logout(): void;
+  setIdentifier(identifier: string): void;
+  setPassword(password: string): void;
 }
 
-// Set login input and output types
-// interface LoginInput {
-//   identifier: string;
-//   password: string
-// }
-// interface LoginOutput {
-//   login: {
-//     jwt: string;
-//   }
-// }
-
-// Set mutation to access login on API
-const LOGIN = gql`
-  mutation Login($input: UsersPermissionsLoginInput!) {
-    login(input: $input) {
-      jwt
-    }
-  }
-`;
-
-// Create Auth Context
+// Creates context
 export const AuthContext = createContext({} as AuthContextData);
 
-// Set AuthProvider props
+// Defines the type for provider props
 interface AuthProviderProps {
   children?: ReactNode
 }
+// Provider definition
 const AuthProvider: React.FC = ({ children }: AuthProviderProps) => {
-  // Create hook states
-  const [token, setToken] = useState<string>();
-  const [gqlError, setGqlError] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
+  // Login mutation variables
+  const [identifier, setIdentifier] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   // Create mutation hook
-  const [login, { loading }] = useMutation(LOGIN);
+  const [login, { loading, error }] = useMutation<LoginOutput, LoginInput>(
+    LOGIN,
+    { variables: { input: { identifier, password } } },
+  );
+  // Hook to store token from login mutation
+  const [token, setToken] = useState<string | null | undefined>(localStorage.getItem('@register-access-control/token'));
+  // Hook to store the Loading state fromlogin mutation
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // Hook to store errors if exists
+  const [gqlError, setGqlError] = useState<string>();
 
-  async function asyncLogin(identifier: string, password: string) {
-    // Send HTTP request to GraphQL uri
+  async function Login() {
     try {
-      const { data } = await login({ variables: { input: { identifier, password } } });
-      // Set states with mutation response
+      // Login mutation request
+      const { data } = await login();
 
-      setToken(data?.login.jwt);
-      setIsLoading(loading);
+      // Validate if token exists in data response
+      if (data?.login?.jwt) {
+        // Save token on local storage
+        localStorage.setItem('@register-access-control/token', data?.login?.jwt);
+        // Set token on hook
+        setToken(data?.login.jwt);
+      }
     } catch (err) {
+      // Set error on hook
       setGqlError(
-        err?.graphQLErrors[0]?.extensions?.exception?.data?.data[0]?.messages[0].message,
+        err?.graphQLErrors[0]?.extensions?.exception.data.message[0].messages[0].message,
       );
     }
+  }
+
+  useEffect(() => {
+    // Set loading state on hook
+    setIsLoading(loading);
+    // Set errors on hook
+    setGqlError(
+      error?.graphQLErrors[0]?.extensions?.exception.data.message[0].messages[0].message,
+    );
+  }, [loading, error]);
+
+  function logout() {
+    // Remove token from local storage
+    localStorage.removeItem('@register-access-control/token');
   }
 
   // Return provider
   return (
     <AuthContext.Provider value={{
-      token, gqlError, isLoading, asyncLogin,
+      token,
+      gqlError,
+      isLoading,
+      setIdentifier,
+      setPassword,
+      Login,
+      logout,
     }}
     >
       {children}

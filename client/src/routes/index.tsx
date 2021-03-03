@@ -14,7 +14,7 @@ const Routes: React.FC = () => {
   return (
     <Switch>
       { !token ? (
-        <Route path="/" exact component={Login} />
+        <Route path="/" component={Login} />
       ) : (
         <RegisteredTimesProvider>
           <Route path="/" exact component={Dashboard} />

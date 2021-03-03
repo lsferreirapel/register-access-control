@@ -111,12 +111,24 @@ export const LoginForm = styled.form`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .error {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      width: 16.25rem;
+
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+    }
   }
 
   button {
     width: 9rem;
     height: 4rem;
     margin-top: 0.5rem;
+    margin-right: 0.5rem;
 
     border: none;
     background: var(--green);

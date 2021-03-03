@@ -7,10 +7,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  // const token = localStorage.getItem('token');
-
-  // TEST!!
-  const token = process.env.REACT_APP_DEVELOP_TOKEN;
+  const token = localStorage.getItem('@register-access-control/token');
 
   // return the headers to the context so httpLink can read them
   return {

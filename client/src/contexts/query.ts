@@ -68,3 +68,27 @@ export const GET_ALL_REGISTERED_TIMES = gql`
   }
 `;
 /* --------------------- */
+
+/* ======== AuthContext.tsx ======== */
+// MUTATIONS
+
+// Type defenitions
+export interface LoginInput {
+  input: {
+    identifier: string;
+    password: string;
+  }
+}
+export interface LoginOutput {
+  login: {
+    jwt: string;
+  }
+}
+// Mutation: login
+export const LOGIN = gql`
+  mutation Login($input: UsersPermissionsLoginInput!) {
+    login(input: $input) {
+      jwt
+    }
+  }
+`;

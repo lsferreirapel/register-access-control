@@ -1,12 +1,11 @@
 import { AlertTitle } from '@material-ui/lab';
-import Alert from '@material-ui/lab/Alert';
 import React, { useContext } from 'react';
 import Card from '../components/Card';
 import Sidebar from '../components/Sidebar';
 import { RegisteredTimesContext } from '../contexts/RegisteredTimesContext';
 
 import {
-  Container, CardListHead, CardListBody, CardList, Loading,
+  Container, CardListHead, CardListBody, CardList, Loading, Error,
 } from '../styles/pages/StyledDashboard';
 
 const Dashboard: React.FC = () => {
@@ -24,10 +23,10 @@ const Dashboard: React.FC = () => {
       ) : (
         <>
           { allRegisteredTimesError ? (
-            <Alert severity="error">
+            <Error severity="error">
               <AlertTitle>Error</AlertTitle>
               {allRegisteredTimesError}
-            </Alert>
+            </Error>
           ) : (
             <CardList>
               <CardListHead>
@@ -48,7 +47,6 @@ const Dashboard: React.FC = () => {
           )}
         </>
       )}
-
     </Container>
   );
 };

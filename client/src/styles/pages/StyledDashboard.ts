@@ -1,5 +1,6 @@
-import { CircularProgress } from '@material-ui/core';
 import styled from 'styled-components';
+import { CircularProgress } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 export const Container = styled.div`
   position: relative;
@@ -15,6 +16,16 @@ export const Loading = styled(CircularProgress)`
   svg {
     color: var(--green);
   }
+`;
+
+export const Error = styled(Alert)`
+  position: absolute;
+  top: 13vh;
+  left: calc(50% + 5rem);
+  transform: translateX(-50%);
+
+  width: 65vw;
+  min-width: 61rem;
 `;
 
 export const CardList = styled.div`

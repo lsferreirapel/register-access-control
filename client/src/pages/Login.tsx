@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import React, { FormEvent, useContext } from 'react';
 import Alert from '@material-ui/lab/Alert';
 import {
   Container, Wrapper, LoginBox, LoginForm, LoginField, PasswordField,
@@ -8,15 +8,18 @@ import Logo from '../assets/logo/logo.png';
 import GreenStain from '../assets/login-asset.svg';
 import { AuthContext } from '../contexts/AuthContext';
 
-const Login: React.FC = () => {
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
-
-  const { asyncLogin, gqlError, isLoading } = useContext(AuthContext);
+const LoginPage: React.FC = () => {
+  const {
+    setIdentifier,
+    setPassword,
+    Login,
+    gqlError,
+    isLoading,
+  } = useContext(AuthContext);
 
   async function handleLogin(e: FormEvent) {
     e.preventDefault();
-    await asyncLogin(identifier, password);
+    await Login();
   }
 
   return (
@@ -58,7 +61,7 @@ const Login: React.FC = () => {
             </PasswordField>
             <div className="alert-div">
               <button type="submit" disabled={isLoading}>Login</button>
-              { gqlError && <Alert severity="error">{gqlError}</Alert>}
+              { gqlError && <Alert className="error" severity="error">{gqlError}</Alert>}
             </div>
           </LoginForm>
         </LoginBox>
@@ -68,4 +71,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

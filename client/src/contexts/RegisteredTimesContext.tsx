@@ -26,7 +26,7 @@ interface RegisteredTimesContextData {
   allRegisteredTimesError: string | undefined,
 }
 
-// Creates the context
+// Creates context
 export const RegisteredTimesContext = createContext({} as RegisteredTimesContextData);
 
 // Defines the type for provider props
@@ -111,6 +111,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
       setAllRegisteredTimesIsLoading(AllRegisteredTimes.loading);
       setAllRegisteredTimesError(AllRegisteredTimes.error?.graphQLErrors[0]?.message);
     } else if (roleType !== 'admin') {
+      setAllRegisteredTimesIsLoading(false);
       setAllRegisteredTimesError('Permission denied');
     }
   }, [AllRegisteredTimes, getRegisteredTimesByUserID, getMe]);
