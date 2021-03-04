@@ -1,29 +1,39 @@
 import React, {
   ReactNode, createContext, useState, useEffect,
 } from 'react';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 
 // Import queries
 import {
   // Type definitions
   GetRegisteredTimesOutput,
   getMeOutput,
+  CreateRegisteredTimeInput,
+  CreateRegisteredTimeOutput,
   // Queries
   GET_ME,
   GET_ALL_REGISTERED_TIMES,
   GET_REGISTERED_TIMES_BY_USER_ID,
+  CREATE_REGISTERED_TIME,
 } from './query';
 
 // Defines the type for values stored in context
 interface RegisteredTimesContextData {
   userId: string;
   roleType: string;
+  username: string;
   RegisteredTimesByUserIdData: GetRegisteredTimesOutput | undefined;
   RegisteredTimesByUserIdIsLoading: boolean;
   RegisteredTimesByUserIdError: string;
-  allRegisteredTimesData: GetRegisteredTimesOutput | undefined,
-  allRegisteredTimesIsLoading: boolean,
-  allRegisteredTimesError: string,
+  allRegisteredTimesData: GetRegisteredTimesOutput | undefined;
+  allRegisteredTimesIsLoading: boolean;
+  allRegisteredTimesError: string;
+  createRegisteredTimeData: CreateRegisteredTimeOutput | undefined | null;
+  createRegisteredTimeIsLoading: boolean;
+  createRegisteredTimeError: string;
+  timeRegistered: string;
+  setTimeRegistered(timeRegistered: string): void;
+  CreateRegisteredTime(): void;
 }
 
 // Creates context
@@ -39,6 +49,8 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
   const getMe = useQuery<getMeOutput>(GET_ME);
   // Hook to store user ID from getMe Query
   const [userId, setUserId] = useState<string>('');
+  // Hook to store user name from getMe Query
+  const [username, setUsername] = useState<string>('');
   // Hook to store user role type from getMe Query
   const [roleType, setRoleType] = useState<string>('');
 
@@ -86,16 +98,62 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
     setAllRegisteredTimesError,
   ] = useState<string>('');
 
+  const [timeRegistered, setTimeRegistered] = useState<string>(new Date().toISOString());
+
+  const [createRegisteredTime, { loading }] = useMutation<
+    CreateRegisteredTimeOutput,
+    CreateRegisteredTimeInput
+  >(
+    CREATE_REGISTERED_TIME,
+    {
+      variables: {
+        input: {
+          data: {
+            timeRegistered,
+            user: userId,
+          },
+        },
+      },
+    },
+  );
+
+  const [
+    createRegisteredTimeData,
+    setCreateRegisteredTimeData,
+  ] = useState<CreateRegisteredTimeOutput | null>();
+  const [
+    createRegisteredTimeIsLoading,
+    setCreateRegisteredTimeIsLoading,
+  ] = useState<boolean>(false);
+  const [
+    createRegisteredTimeError,
+    setCreateRegisteredTimeError,
+  ] = useState<string>('');
+
+  async function CreateRegisteredTime() {
+    try {
+      const { data } = await createRegisteredTime();
+      setCreateRegisteredTimeData(data);
+      document.location.reload();
+    } catch (error) {
+      setCreateRegisteredTimeError(error?.message);
+    }
+  }
+  useEffect(() => {
+    setCreateRegisteredTimeIsLoading(loading);
+  }, [loading]);
+
   // Toggles between execute a lazy query and not execute
   const [execute, setExecute] = useState<boolean>(true);
 
   useEffect(() => {
     // Set data on hooks with getMe query response
-    setUserId(getMe.data?.me.id ?? '');
+    setUserId(getMe.data?.me?.id ?? '');
     setRoleType(getMe.data?.me?.role?.type ?? '');
 
     // Set data on hooks with getRegisteredTimesByUserID query response
     setRegisteredTimesByUserIdData(getRegisteredTimesByUserID.data);
+    setUsername(getRegisteredTimesByUserID.data?.registeredTimes[0]?.user?.name ?? '');
     setRegisteredTimesByUserIdIsLoading(getRegisteredTimesByUserID.loading);
     setRegisteredTimesByUserIdError(getRegisteredTimesByUserID.error?.graphQLErrors[0]?.message ?? '');
 
@@ -121,12 +179,19 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
     <RegisteredTimesContext.Provider value={{
       userId,
       roleType,
+      username,
       RegisteredTimesByUserIdData,
       RegisteredTimesByUserIdIsLoading,
       RegisteredTimesByUserIdError,
       allRegisteredTimesData,
       allRegisteredTimesIsLoading,
       allRegisteredTimesError,
+      createRegisteredTimeData,
+      createRegisteredTimeIsLoading,
+      createRegisteredTimeError,
+      timeRegistered,
+      setTimeRegistered,
+      CreateRegisteredTime,
     }}
     >
       {children}

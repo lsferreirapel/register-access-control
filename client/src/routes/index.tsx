@@ -5,6 +5,7 @@ import { AuthContext } from '../contexts/AuthContext';
 // Pages
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
+import Drawer from '../components/Drawer';
 
 import RegisteredTimesProvider from '../contexts/RegisteredTimesContext';
 import MyRegisters from '../pages/MyRegisters';
@@ -22,6 +23,7 @@ const Routes: React.FC = () => {
           <SidebarProvider>
             <Route path="/" exact component={Dashboard} />
             <Route path="/registers" component={MyRegisters} />
+            <Route path="/drawer" component={Drawer} />
           </SidebarProvider>
         </RegisteredTimesProvider>
       )}

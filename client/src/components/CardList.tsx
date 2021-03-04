@@ -42,11 +42,11 @@ const CardList = ({
             <CardListBody>
               {RegisteredTimesData?.registeredTimes.map((registeredTime) => {
                 const time = new Date(registeredTime.timeRegistered);
-                const date = `${String(time.getDay()).padStart(2, '0')}/${String(time.getMonth()).padStart(2, '0')}/${time.getFullYear()}`;
+                const date = `${String(time.getDay()).padStart(2, '0')}/${String(time.getMonth() + 1).padStart(2, '0')}/${time.getFullYear()}`;
                 const hour = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}h`;
 
                 return <Card key={registeredTime.id} id={String(registeredTime.user.id).padStart(3, '0')} name={registeredTime.user.name} date={date} hour={hour} />;
-              })}
+              }).reverse()}
             </CardListBody>
           </Container>
         )}
