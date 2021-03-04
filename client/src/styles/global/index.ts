@@ -38,10 +38,18 @@ export default createGlobalStyle`
   body, input, textarea, button {
     /* Set default font */
     font: 400 1rem "Nunito", sans-serif;
+
+
     /* font-family: 'Montserrat', sans-serif; */
   }
   button {
     cursor: pointer;
+    border: none;
+    background: transparent;
+    &:focus {
+      outline: none;
+      outline-offset: none;
+    }
   }
   a {
     color: inherit;

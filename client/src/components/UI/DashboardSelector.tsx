@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SvgIcon } from '@material-ui/core';
+import { SidebarContext } from '../../contexts/SidebarContext';
 
-interface DashboardSelectorProps {
-  active?: boolean;
-}
-
-const DashboardSelector = ({ active = false }:DashboardSelectorProps) => {
+const DashboardSelector = () => {
   const [color, setColor] = useState<string>('#A5A5A5');
+  const { dashboard } = useContext(SidebarContext);
 
   useEffect(() => {
-    if (active) {
+    if (dashboard) {
       setColor('#219653');
+    } else {
+      setColor('#A5A5A5');
     }
-  }, [color]);
+  }, [dashboard]);
 
   return (
     <SvgIcon style={{ color, fontSize: '1.75rem' }} viewBox="0 0 26 26">
