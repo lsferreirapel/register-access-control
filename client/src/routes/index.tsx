@@ -5,8 +5,11 @@ import { AuthContext } from '../contexts/AuthContext';
 // Pages
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
+import Drawer from '../components/Drawer';
 
 import RegisteredTimesProvider from '../contexts/RegisteredTimesContext';
+import MyRegisters from '../pages/MyRegisters';
+import SidebarProvider from '../contexts/SidebarContext';
 
 const Routes: React.FC = () => {
   const { token } = useContext(AuthContext);
@@ -17,12 +20,13 @@ const Routes: React.FC = () => {
         <Route path="/" component={Login} />
       ) : (
         <RegisteredTimesProvider>
-          <Route path="/" exact component={Dashboard} />
+          <SidebarProvider>
+            <Route path="/" exact component={Dashboard} />
+            <Route path="/registers" component={MyRegisters} />
+            <Route path="/drawer" component={Drawer} />
+          </SidebarProvider>
         </RegisteredTimesProvider>
       )}
-      {/* Just to test */}
-      <Route path="/dashboard" component={Dashboard} />
-
     </Switch>
   );
 };

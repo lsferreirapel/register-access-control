@@ -19,6 +19,7 @@ export const GET_ME = gql`
   query {
     me {
       id
+      username
       role {
         type
       }
@@ -26,6 +27,7 @@ export const GET_ME = gql`
   }
 `;
 /* --------------------- */
+// QUERIES
 
 // GET REGISTERED TIMES
 // Type definitions
@@ -67,6 +69,44 @@ export const GET_ALL_REGISTERED_TIMES = gql`
     }
   }
 `;
+
+// MUTATIONS
+
+// Type defenitions
+export interface CreateRegisteredTimeInput {
+  input: {
+    data: {
+      // USER ID
+      user: string;
+      // DATE TO STRING
+      timeRegistered: string;
+    }
+  }
+}
+export interface CreateRegisteredTimeOutput {
+  registeredTime: {
+    timeRegistered: string;
+    user: {
+      id: string;
+      name: string;
+    }
+  }
+}
+// Mutation: createRegisteredTime
+export const CREATE_REGISTERED_TIME = gql`
+  mutation createRegisteredTime($input: createRegisteredTimeInput!) {
+    createRegisteredTime(input: $input) {
+      registeredTime {
+        timeRegistered
+        user {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 /* --------------------- */
 
 /* ======== AuthContext.tsx ======== */

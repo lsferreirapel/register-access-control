@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -36,6 +37,7 @@ export const Container = styled.div`
     }
   }
 `;
+
 export const Logo = styled.img`
   width: 4rem;
   height: 4rem;
@@ -50,7 +52,7 @@ interface SelectorProps {
   active?: boolean;
 }
 
-export const Selector = styled.div<SelectorProps>`
+export const Selector = styled(Link)<SelectorProps>`
   position: relative;
   display: flex;
   flex-direction: column;
