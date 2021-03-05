@@ -1,33 +1,37 @@
 import React, { useContext } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 // Pages
-import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login';
-import Drawer from '../components/Drawer';
-
-import RegisteredTimesProvider from '../contexts/RegisteredTimesContext';
+import Dashboard from '../pages/Dashboard';
 import MyRegisters from '../pages/MyRegisters';
+
+// Providers
+import RegisteredTimesProvider from '../contexts/RegisteredTimesContext';
 import SidebarProvider from '../contexts/SidebarContext';
+
+// Context
+import { AuthContext } from '../contexts/AuthContext';
 
 const Routes: React.FC = () => {
   const { token } = useContext(AuthContext);
 
   return (
-    <Switch>
-      { !token ? (
-        <Route path="/" component={Login} />
-      ) : (
-        <RegisteredTimesProvider>
-          <SidebarProvider>
-            <Route path="/" exact component={Dashboard} />
-            <Route path="/registers" component={MyRegisters} />
-            <Route path="/drawer" component={Drawer} />
-          </SidebarProvider>
-        </RegisteredTimesProvider>
-      )}
-    </Switch>
+    <BrowserRouter>
+      <Switch>
+        {/* If exists token, redirect to dashboard */}
+        { !token ? (
+          <Route path="/" component={Login} />
+        ) : (
+          <RegisteredTimesProvider>
+            <SidebarProvider>
+              <Route path="/" exact component={Dashboard} />
+              <Route path="/registers" component={MyRegisters} />
+            </SidebarProvider>
+          </RegisteredTimesProvider>
+        )}
+      </Switch>
+    </BrowserRouter>
   );
 };
 

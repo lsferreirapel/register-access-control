@@ -11,7 +11,7 @@ export const Container = styled.div`
     position: absolute;
     width: 65vw;
     min-width: 61rem;
-    bottom: 83vh;
+    bottom: 85vh;
     left: calc(50% + 5rem);
     transform: translateX(-50%);
 
