@@ -5,7 +5,7 @@
 
 
 ## 🧾 Features
-#
+
 - Manage registered times
 - Record collaborators working hours
 - Only the System Administrator will be able to view the list with the records of all Collaborators on the system
@@ -17,7 +17,7 @@ dashboard
 
 
 ## 🧰 Technologies
-#
+
 - [React.js](https://reactjs.org/)
 - [react-router-dom](https://reactrouter.com/)
 - [Typescript](https://www.typescriptlang.org/)
@@ -28,7 +28,7 @@ dashboard
 - [Gitmoji](https://gitmoji.dev/)
 
 ## 🔧 How to Setup
-#
+
 ```bash
   # Clone the project
   $ git clone https://github.com/lsferreirapel/register-access-control.git
