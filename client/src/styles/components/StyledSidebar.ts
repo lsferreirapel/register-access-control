@@ -59,6 +59,13 @@ export const Container = styled.div`
 export const Logo = styled.img`
   width: 4rem;
   height: 4rem;
+
+  @media(max-width: 1000px) {
+    margin-left: 1.3rem;
+  }
+  @media(max-width: 650px) {
+    margin-left: 1rem;
+  }
 `;
 export const Selectors = styled.div`
   display: flex;
@@ -69,6 +76,9 @@ export const Selectors = styled.div`
     flex: 1;
     justify-content: center;
     flex-direction: row;
+  }
+  @media(max-width: 650px) {
+    justify-content: flex-start;
   }
 `;
 
@@ -101,6 +111,10 @@ export const Selector = styled(Link)<SelectorProps>`
       height: 3px;
     }
 
+  }
+
+  @media(max-width: 650px) {
+    margin-right: 0.75rem;
   }
 
   &:after {
