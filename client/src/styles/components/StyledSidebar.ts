@@ -16,12 +16,30 @@ export const Container = styled.div`
   background: var(--white);
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
+  @media(max-width: 1000px) {
+    flex-direction: row;
+
+    z-index: 999;
+
+    width: 100vw;
+    max-width: 100vw;
+    height: 100%;
+    max-height: 7rem;
+    padding-top: 1rem;
+  }
+
   & > .exit {
     position: absolute;
     bottom: 1.663rem;
     line-height: 0;
     border: none;
     background: transparent;
+
+    @media(max-width: 1000px) {
+      right: 1.663rem;
+      bottom: 50%;
+      transform: translateY(50%);
+    }
 
     svg {
       color: #5B5B5B;
@@ -46,6 +64,12 @@ export const Selectors = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media(max-width: 1000px) {
+    flex: 1;
+    justify-content: center;
+    flex-direction: row;
+  }
 `;
 
 interface SelectorProps {
@@ -67,6 +91,18 @@ export const Selector = styled(Link)<SelectorProps>`
 
   cursor: pointer;
 
+  @media(max-width: 1000px) {
+    border: none;
+    margin-right: 5rem;
+    margin-top: 0;
+
+    &:after {
+      width: 100%;
+      height: 3px;
+    }
+
+  }
+
   &:after {
     content: "";
     position: absolute;
@@ -77,6 +113,13 @@ export const Selector = styled(Link)<SelectorProps>`
     height: 100%;
     border-radius: 30px;
     background: ${(props) => (props.active ? 'var(--green)' : 'transparent')};
+
+    @media(max-width: 1000px) {
+      width: 100%;
+      height: 4px;
+      left: 1px;
+      top: 80%;
+    }
   }
 
   span, svg {

@@ -6,6 +6,7 @@ import Drawer from '../components/Drawer';
 import Sidebar from '../components/Sidebar';
 import { RegisteredTimesContext } from '../contexts/RegisteredTimesContext';
 import { SidebarContext } from '../contexts/SidebarContext';
+import { StandardButton } from '../styles/components/StyledButton';
 
 import { Container } from '../styles/pages/StyledMyRegisters';
 
@@ -31,7 +32,7 @@ const MyRegisters = () => {
   return (
     <Container>
       <div className="button-container">
-        <button type="button" onClick={handleToogleDrawer}>Registrar</button>
+        <StandardButton size="large" type="button" onClick={handleToogleDrawer}>Registrar</StandardButton>
       </div>
       <Drawer toogle={toogleDrawer} setToogle={setToogleDrawer} />
       <Sidebar />

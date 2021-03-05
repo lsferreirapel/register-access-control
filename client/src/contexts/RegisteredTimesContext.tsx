@@ -170,7 +170,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
       setAllRegisteredTimesError(AllRegisteredTimes.error?.graphQLErrors[0]?.message ?? '');
     } else if (roleType !== 'admin') {
       setAllRegisteredTimesIsLoading(false);
-      setAllRegisteredTimesError('Permission denied');
+      setAllRegisteredTimesError('Only administrators can access the dashboard');
     }
   }, [AllRegisteredTimes, getRegisteredTimesByUserID, getMe]);
 

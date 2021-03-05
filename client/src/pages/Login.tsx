@@ -7,6 +7,7 @@ import {
 import Logo from '../assets/logo/logo.png';
 import GreenStain from '../assets/login-asset.svg';
 import { AuthContext } from '../contexts/AuthContext';
+import { StandardButton } from '../styles/components/StyledButton';
 
 const LoginPage: React.FC = () => {
   const {
@@ -60,7 +61,7 @@ const LoginPage: React.FC = () => {
               />
             </PasswordField>
             <div className="alert-div">
-              <button type="submit" disabled={isLoading}>Login</button>
+              <StandardButton size="large" type="submit" disabled={isLoading}>Login</StandardButton>
               { gqlError && <Alert className="error" severity="error">{gqlError}</Alert>}
             </div>
           </LoginForm>

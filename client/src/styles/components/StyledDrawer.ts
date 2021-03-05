@@ -122,26 +122,4 @@ export const Footer = styled.form`
   width: 100%;
   height:5rem;
   border-top: 1px solid var(--gray);
-
-  & > button {
-    padding: 0.594rem 2.188rem;
-
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 1.188rem;
-    text-align: center;
-  }
-
-  & > .save {
-    border: none;
-    background: var(--green);
-    border: 1px solid var(--green);
-    color: var(--white);
-  }
-  & > .cancel {
-    background: transparent;
-    border: 1px solid var(--green);
-    color: var(--green);
-  }
-
 `;

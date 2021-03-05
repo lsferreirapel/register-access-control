@@ -11,6 +11,7 @@ import {
   Container, Header, Form, Title, Footer, DateTimeInput,
 } from '../styles/components/StyledDrawer';
 import { RegisteredTimesContext } from '../contexts/RegisteredTimesContext';
+import { OutlinedButton, StandardButton } from '../styles/components/StyledButton';
 
 interface DrawerProps {
   toogle: boolean;
@@ -62,24 +63,24 @@ const Drawer = ({ toogle, setToogle }: DrawerProps) => {
         { createRegisteredTimeIsLoading && <CircularProgress />}
         { createRegisteredTimeError && <Alert severity="error">{createRegisteredTimeError}</Alert> }
         <Footer>
-          <button
+          <StandardButton
+            size="small"
             disabled={createRegisteredTimeIsLoading}
-            className="save"
-            type="button"
+            type="submit"
             onClick={(e) => handleCreateRegisteredTime(e)}
           >
             Salvar
 
-          </button>
-          <button
+          </StandardButton>
+          <OutlinedButton
+            size="small"
             disabled={createRegisteredTimeIsLoading}
-            className="cancel"
             type="button"
             onClick={() => setToogle(!toogle)}
           >
             Cancelar
 
-          </button>
+          </OutlinedButton>
         </Footer>
       </Form>
     </Container>
