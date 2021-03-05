@@ -1,4 +1,36 @@
+import { createMuiTheme } from '@material-ui/core';
 import styled, { createGlobalStyle } from 'styled-components';
+
+export const globalTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#219653',
+    },
+  },
+  typography: {
+    fontFamily: [
+      'Montserrat',
+      'Nunito',
+      'sans-serif',
+    ].join(','),
+    fontSize: 16,
+  },
+  overrides: {
+    MuiCircularProgress: {
+      svg: {
+        color: '#219653',
+      },
+    },
+    MuiTypography: {
+      body1: {
+        fontFamily: 'Montserrat, sans-serif',
+      },
+      body2: {
+        fontFamily: 'Montserrat, sans-serif',
+      },
+    },
+  },
+});
 
 export default createGlobalStyle`
   :root {

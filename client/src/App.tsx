@@ -1,23 +1,25 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 
+// Providers
 import { ApolloProvider } from '@apollo/client';
-import GlobalStyles, { Container } from './styles/global';
-
-import apolloClient from './services/apollo';
+import { ThemeProvider } from '@material-ui/styles';
 import AuthProvider from './contexts/AuthContext';
 
+// Global styles
+import GlobalStyles, { Container, globalTheme } from './styles/global';
+
+import apolloClient from './services/apollo';
 import Routes from './routes';
 
 const App: React.FC = () => (
   <Container>
-    <BrowserRouter>
+    <ThemeProvider theme={globalTheme}>
       <ApolloProvider client={apolloClient}>
         <AuthProvider>
           <Routes />
         </AuthProvider>
       </ApolloProvider>
-    </BrowserRouter>
+    </ThemeProvider>
     <GlobalStyles />
   </Container>
 );

@@ -17,21 +17,11 @@ export const Container = styled.div`
     min-width: 600px;
     left: 50%;
   }
-
-  /* @media(max-width: 650px) {
-    width: 90vw;
-    min-width: 600px;
-    left: 50%;
-  } */
 `;
 export const Loading = styled(CircularProgress)`
   position: absolute;
   top: 45vh;
   left: calc(50% + 2rem);
-
-  svg {
-    color: var(--green);
-  }
 `;
 export const Error = styled(Alert)`
   position: absolute;
@@ -41,6 +31,13 @@ export const Error = styled(Alert)`
 
   width: 65vw;
   min-width: 61rem;
+
+  @media(max-width: 1000px) {
+    top: 8rem;
+    width: 90vw;
+    min-width: 90vw;
+    left: 50%;
+  }
 `;
 
 export const CardListHead = styled.div`
@@ -54,15 +51,18 @@ export const CardListHead = styled.div`
   margin-bottom: 30px;
   width: 100%;
 
+  @media(max-width: 650px) {
+    display: none;
+  }
   & > h3 {
   font-size: 1.563rem;
   font-weight: 400;
 
-  &:nth-child(2) {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-100%);
-  }
+    &:nth-child(2) {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-100%);
+    }
   }
 `;
 export const CardListBody = styled.div``;

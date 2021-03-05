@@ -98,8 +98,10 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
     setAllRegisteredTimesError,
   ] = useState<string>('');
 
+  // Hook to store the Date from date time input
   const [timeRegistered, setTimeRegistered] = useState<string>(new Date().toISOString());
 
+  // Create mutation hook
   const [createRegisteredTime, { loading }] = useMutation<
     CreateRegisteredTimeOutput,
     CreateRegisteredTimeInput
@@ -117,28 +119,35 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
     },
   );
 
+  // Hook to store the createRegisteredTime mutation response
   const [
     createRegisteredTimeData,
     setCreateRegisteredTimeData,
   ] = useState<CreateRegisteredTimeOutput | null>();
+  // Hook to store the Loading state from createRegisteredTime mutation
   const [
     createRegisteredTimeIsLoading,
     setCreateRegisteredTimeIsLoading,
   ] = useState<boolean>(false);
+  // Hook to store errors if exists
   const [
     createRegisteredTimeError,
     setCreateRegisteredTimeError,
   ] = useState<string>('');
 
+  // Function to call the mutation with useMutation hook
   async function CreateRegisteredTime() {
     try {
       const { data } = await createRegisteredTime();
+      // Set data on hook
       setCreateRegisteredTimeData(data);
+      // Reload page if all ok
       document.location.reload();
     } catch (error) {
       setCreateRegisteredTimeError(error?.message);
     }
   }
+  // Set loading state
   useEffect(() => {
     setCreateRegisteredTimeIsLoading(loading);
   }, [loading]);
@@ -170,7 +179,7 @@ const RegisteredTimesProvider: React.FC = ({ children }:RegisteredTimesProviderP
       setAllRegisteredTimesError(AllRegisteredTimes.error?.graphQLErrors[0]?.message ?? '');
     } else if (roleType !== 'admin') {
       setAllRegisteredTimesIsLoading(false);
-      setAllRegisteredTimesError('Permission denied');
+      setAllRegisteredTimesError('Only administrators can access the dashboard');
     }
   }, [AllRegisteredTimes, getRegisteredTimesByUserID, getMe]);
 
